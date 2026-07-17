@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 
-import 'home_screen.dart';
-import 'savings_screen.dart';
 import 'bike_screen.dart';
+import 'home_screen.dart';
 import 'insurance_screen.dart';
 import 'profile_screen.dart';
+import 'savings_screen.dart';
 
 class MainNavigation extends StatefulWidget {
+  final int userId;
   final String userName;
 
-  const MainNavigation({super.key, required this.userName});
+  const MainNavigation({
+    super.key,
+    required this.userId,
+    required this.userName,
+  });
 
   @override
   State<MainNavigation> createState() => _MainNavigationState();
@@ -29,70 +34,37 @@ class _MainNavigationState extends State<MainNavigation> {
 
       const InsuranceScreen(),
 
-      ProfileScreen(userName: widget.userName),
+      ProfileScreen(userId: widget.userId, userName: widget.userName),
     ];
 
     return Scaffold(
       body: pages[currentIndex],
 
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(.08), blurRadius: 20),
-          ],
-        ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
 
-        child: NavigationBar(
-          selectedIndex: currentIndex,
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
 
-          onDestinationSelected: (index) {
-            setState(() {
-              currentIndex = index;
-            });
-          },
+        type: BottomNavigationBarType.fixed,
 
-          destinations: [
-            NavigationDestination(
-              icon: Icon(Icons.home_outlined),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
 
-              selectedIcon: Icon(Icons.home),
+          BottomNavigationBarItem(icon: Icon(Icons.savings), label: "Savings"),
 
-              label: "Home",
-            ),
+          BottomNavigationBarItem(icon: Icon(Icons.motorcycle), label: "Bike"),
 
-            NavigationDestination(
-              icon: Icon(Icons.savings_outlined),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.security),
+            label: "Insurance",
+          ),
 
-              selectedIcon: Icon(Icons.savings),
-
-              label: "Savings",
-            ),
-
-            NavigationDestination(
-              icon: Icon(Icons.motorcycle_outlined),
-
-              selectedIcon: Icon(Icons.motorcycle),
-
-              label: "Bike",
-            ),
-
-            NavigationDestination(
-              icon: Icon(Icons.security_outlined),
-
-              selectedIcon: Icon(Icons.security),
-
-              label: "Insurance",
-            ),
-
-            NavigationDestination(
-              icon: Icon(Icons.person_outline),
-
-              selectedIcon: Icon(Icons.person),
-
-              label: "Profile",
-            ),
-          ],
-        ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+        ],
       ),
     );
   }
