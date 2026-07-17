@@ -15,11 +15,13 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  static const String baseUrl = "http://192.168.1.7:5000";
   bool rememberMe = false;
   bool obscurePassword = true;
-  bool isLoading = false;
 
+  bool isLoading = false;
   final emailController = TextEditingController();
+
   final passwordController = TextEditingController();
 
   @override
@@ -31,11 +33,9 @@ class _SignInScreenState extends State<SignInScreen> {
           width: 390,
           height: 850,
           color: const Color(0xFFF5F7FB),
-
           child: SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(24),
-
               child: Column(
                 children: [
                   const SizedBox(height: 30),
@@ -147,7 +147,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             value: rememberMe,
                             onChanged: (value) {
                               setState(() {
-                                rememberMe = value!;
+                                rememberMe = value ?? false;
                               });
                             },
                           ),
@@ -157,6 +157,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         ],
                       ),
+
                       TextButton(
                         onPressed: () {
                           Navigator.push(
@@ -213,7 +214,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const RegisterScreen(),
+                              builder: (_) => const RegisterScreen(),
                             ),
                           );
                         },
@@ -253,7 +254,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse("http://192.168.1.7:5000/api/auth/login"),
+        Uri.parse("$baseUrl/api/auth/login"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "email": emailController.text.trim(),
@@ -266,9 +267,6 @@ class _SignInScreenState extends State<SignInScreen> {
       if (!mounted) return;
 
       if (response.statusCode == 200) {
-        // Save user name before clearing fields
-        final String userName = data["user"]["name"];
-
         emailController.clear();
         passwordController.clear();
 
@@ -287,6 +285,7 @@ class _SignInScreenState extends State<SignInScreen> {
         );
       } else {
         passwordController.clear();
+
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text(data["message"])));
