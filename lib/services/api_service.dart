@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   // Backend URL
-  static const String baseUrl = "http://192.168.1.72:5000/api/auth";
+  static const String baseUrl = "http://192.168.1.9:5000/api/auth";
 
   // UPDATE PROFILE
   static Future<bool> updateProfile({

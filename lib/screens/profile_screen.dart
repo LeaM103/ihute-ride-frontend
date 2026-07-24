@@ -22,7 +22,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   static const Color primaryColor = Color(0xFF2563EB);
 
-  static const String baseUrl = "http://192.168.1.72:5000";
+  static const String baseUrl = "http://192.168.1.9:5000";
 
   late TextEditingController _nameController;
   late TextEditingController _phoneController;
