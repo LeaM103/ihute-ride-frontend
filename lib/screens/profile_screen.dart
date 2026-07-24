@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'sign_in_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final int userId;
+  final String userId;
   final String userName;
 
   const ProfileScreen({
@@ -22,7 +22,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   static const Color primaryColor = Color(0xFF2563EB);
 
-  static const String baseUrl = "http://192.168.1.7:5000";
+  static const String baseUrl = "http://192.168.1.72:5000";
 
   late TextEditingController _nameController;
   late TextEditingController _phoneController;
@@ -34,30 +34,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FB),
+
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
+
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+
             children: [
-              // HEADER
+              // PROFILE HEADER
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(25),
+
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
                   ),
+
                   borderRadius: BorderRadius.circular(25),
                 ),
+
                 child: Column(
                   children: [
                     const CircleAvatar(
                       radius: 45,
                       backgroundColor: Colors.white,
+
                       child: Icon(Icons.person, size: 55, color: primaryColor),
                     ),
+
                     const SizedBox(height: 15),
+
                     Text(
                       _nameController.text,
                       style: const TextStyle(
@@ -66,12 +75,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+
                     const SizedBox(height: 8),
+
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
+
                       children: [
                         Icon(Icons.verified, color: Colors.white, size: 18),
+
                         SizedBox(width: 5),
+
                         Text(
                           "Verified Rider",
                           style: TextStyle(color: Colors.white),
@@ -91,51 +105,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               const SizedBox(height: 20),
 
-              TextField(
+              profileField(
                 controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: "Full Name",
-                  prefixIcon: const Icon(Icons.person),
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
+                label: "Full Name",
+                icon: Icons.person,
               ),
 
               const SizedBox(height: 15),
 
-              TextField(
+              profileField(
                 controller: _phoneController,
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                  labelText: "Phone Number",
-                  prefixIcon: const Icon(Icons.phone),
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
+                label: "Phone Number",
+                icon: Icons.phone,
+                keyboard: TextInputType.phone,
               ),
 
               const SizedBox(height: 15),
 
-              TextField(
+              profileField(
                 controller: _occupationController,
-                decoration: InputDecoration(
-                  labelText: "Occupation",
-                  prefixIcon: const Icon(Icons.work),
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
+                label: "Occupation",
+                icon: Icons.work,
               ),
 
               const SizedBox(height: 30),
@@ -148,7 +138,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 15),
 
               settingCard(Icons.lock, "Change Password"),
+
               settingCard(Icons.notifications, "Notifications"),
+
               settingCard(Icons.help, "Help & Support"),
 
               const SizedBox(height: 30),
@@ -156,24 +148,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(
                 width: double.infinity,
                 height: 55,
+
                 child: ElevatedButton.icon(
                   onPressed: _isSaving ? null : _saveProfile,
+
                   icon: _isSaving
                       ? const SizedBox(
                           height: 18,
                           width: 18,
+
                           child: CircularProgressIndicator(
                             color: Colors.white,
                             strokeWidth: 2,
                           ),
                         )
                       : const Icon(Icons.save, color: Colors.white),
+
                   label: Text(
                     _isSaving ? "Saving..." : "Save Changes",
+
                     style: const TextStyle(color: Colors.white, fontSize: 17),
                   ),
+
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColor,
+
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18),
                     ),
@@ -186,25 +185,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(
                 width: double.infinity,
                 height: 55,
+
                 child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+
+                      MaterialPageRoute(builder: (_) => const SignInScreen()),
+
+                      (route) => false,
+                    );
+                  },
+
                   icon: const Icon(Icons.logout, color: Colors.white),
+
                   label: const Text(
                     "Logout",
+
                     style: TextStyle(color: Colors.white, fontSize: 17),
                   ),
+
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
+
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18),
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => const SignInScreen()),
-                      (route) => false,
-                    );
-                  },
                 ),
               ),
             ],
@@ -227,8 +234,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
 
     _nameController = TextEditingController(text: widget.userName);
-    _phoneController = TextEditingController(text: "+250");
-    _occupationController = TextEditingController(text: "Professional Rider");
+    _phoneController = TextEditingController();
+    _occupationController = TextEditingController();
 
     _nameController.addListener(() {
       if (mounted) {
@@ -237,20 +244,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
+  Widget profileField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    TextInputType keyboard = TextInputType.text,
+  }) {
+    return TextField(
+      controller: controller,
+
+      keyboardType: keyboard,
+
+      decoration: InputDecoration(
+        labelText: label,
+
+        prefixIcon: Icon(icon),
+
+        filled: true,
+
+        fillColor: Colors.white,
+
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18),
+
+          borderSide: BorderSide.none,
+        ),
+      ),
+    );
+  }
+
   Widget settingCard(IconData icon, String title) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
+
       padding: const EdgeInsets.all(18),
+
       decoration: BoxDecoration(
         color: Colors.white,
+
         borderRadius: BorderRadius.circular(18),
       ),
+
       child: Row(
         children: [
           Icon(icon, color: primaryColor),
+
           const SizedBox(width: 15),
+
           Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+
           const Spacer(),
+
           const Icon(Icons.arrow_forward_ios, size: 16),
         ],
       ),
@@ -264,29 +308,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     try {
       final response = await http.put(
-        Uri.parse("$baseUrl/api/auth/update-profile"),
+        Uri.parse("$baseUrl/api/auth/update-profile/${widget.userId}"),
+
         headers: {"Content-Type": "application/json"},
+
         body: jsonEncode({
-          "id": widget.userId,
           "name": _nameController.text.trim(),
+
           "phone": _phoneController.text.trim(),
+
           "occupation": _occupationController.text.trim(),
         }),
       );
 
       if (!mounted) return;
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+      final data = jsonDecode(response.body);
 
+      if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(data["message"]),
+            content: Text(data["message"] ?? "Profile updated"),
+
             backgroundColor: Colors.green,
           ),
         );
-
-        setState(() {});
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(response.body), backgroundColor: Colors.red),
@@ -298,6 +344,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Connection error: $e"),
+
           backgroundColor: Colors.red,
         ),
       );

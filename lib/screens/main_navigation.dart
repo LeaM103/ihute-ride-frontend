@@ -7,7 +7,7 @@ import 'profile_screen.dart';
 import 'savings_screen.dart';
 
 class MainNavigation extends StatefulWidget {
-  final int userId;
+  final String userId;
   final String userName;
 
   const MainNavigation({
@@ -34,7 +34,10 @@ class _MainNavigationState extends State<MainNavigation> {
 
       const InsuranceScreen(),
 
-      ProfileScreen(userId: widget.userId, userName: widget.userName),
+      ProfileScreen(
+        userId: widget.userId.toString(),
+        userName: widget.userName,
+      ),
     ];
 
     return Scaffold(

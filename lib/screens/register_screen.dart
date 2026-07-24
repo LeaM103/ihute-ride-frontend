@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,50 +18,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
-
-  Future<void> registerUser() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    try {
-      final response = await http.post(
-        Uri.parse("http://192.168.1.7:5000/api/auth/register"),
-
-        headers: {"Content-Type": "application/json"},
-
-        body: jsonEncode({
-          "name": nameController.text.trim(),
-
-          "email": emailController.text.trim(),
-
-          "password": passwordController.text.trim(),
-        }),
-      );
-
-      final data = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(data["message"])));
-
-        Navigator.pop(context);
-      } else {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(data["message"])));
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Connection error: $e")));
-    }
-
-    setState(() {
-      isLoading = false;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -277,5 +234,49 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> registerUser() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final response = await http.post(
+        Uri.parse("http://192.168.1.72:5000/api/auth/register"),
+
+        headers: {"Content-Type": "application/json"},
+
+        body: jsonEncode({
+          "name": nameController.text.trim(),
+
+          "email": emailController.text.trim(),
+
+          "password": passwordController.text.trim(),
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(data["message"])));
+
+        Navigator.pop(context);
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(data["message"])));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Connection error: $e")));
+    }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 }

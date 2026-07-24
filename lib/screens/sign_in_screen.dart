@@ -15,7 +15,7 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  static const String baseUrl = "http://192.168.1.7:5000";
+  static const String baseUrl = "http://192.168.1.72:5000";
   bool rememberMe = false;
   bool obscurePassword = true;
 
@@ -278,7 +278,7 @@ class _SignInScreenState extends State<SignInScreen> {
           context,
           MaterialPageRoute(
             builder: (_) => MainNavigation(
-              userId: data["user"]["id"],
+              userId: data["user"]["id"].toString(),
               userName: data["user"]["name"],
             ),
           ),
